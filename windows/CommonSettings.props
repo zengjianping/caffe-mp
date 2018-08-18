@@ -8,8 +8,8 @@
         <ProtocDir>$(ThirdDir)\caffe1-dependencies\bin\</ProtocDir>
         <ScriptsDir>$(SolutionDir)scripts</ScriptsDir>
         <!--NOTE: CpuOnlyBuild and UseCuDNN flags can't be set at the same time.-->
-        <CpuOnlyBuild>true</CpuOnlyBuild>
-        <UseCuDNN>false</UseCuDNN>
+        <CpuOnlyBuild>false</CpuOnlyBuild>
+        <UseCuDNN>true</UseCuDNN>
         <CudaVersion>9.0</CudaVersion>
         <!-- NOTE: If Python support is enabled, PythonDir (below) needs to be
          set to the root of your Python installation. If your Python installation
@@ -58,9 +58,9 @@
     <PropertyGroup>
         <CaffeDepDir>$(ThirdDir)\caffe1-dependencies</CaffeDepDir>
         <ThirdIncDir>$(CaffeDepDir)\include;$(CaffeDepDir)\include\lmdb;$(CaffeDepDir)\include\hdf5</ThirdIncDir>
-        <ThirdIncDir>$(ThirdIncDir);$(CaffeDepDir)\include\openblas;$(ThirdDir)\boost_1_64_0</ThirdIncDir>
+        <ThirdIncDir>$(ThirdIncDir);$(CaffeDepDir)\include\openblas;$(ThirdDir)\boost_1_65_1</ThirdIncDir>
         <ThirdIncDir>$(ThirdIncDir);$(ThirdDir)\OpenCV-3.2.0\build\include</ThirdIncDir>
-        <ThirdLibDir>$(CaffeDepDir)\lib;$(ThirdDir)\boost_1_64_0\lib64-msvc-14.0</ThirdLibDir>
+        <ThirdLibDir>$(CaffeDepDir)\lib;$(ThirdDir)\boost_1_65_1\lib64-msvc-14.0</ThirdLibDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
         <ThirdLibraries>gflags.lib;glog.lib;leveldb.lib;lmdb.lib;libprotobuf.lib;snappy.lib;libopenblas.dll.a</ThirdLibraries>
