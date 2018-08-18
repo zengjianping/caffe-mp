@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ImportGroup Label="PropertySheets" />
+    <PropertyGroup Label="UserMacros">
+        <RootDir>$(SolutionDir)..</RootDir>
+        <BuildDir>$(RootDir)\build_win</BuildDir>
+        <ThirdDir>$(ThirdPartyLibDir)</ThirdDir>
+        <ProtocDir>$(ThirdDir)\caffe1-dependencies\bin\</ProtocDir>
+        <ScriptsDir>$(SolutionDir)scripts</ScriptsDir>
+        <!--NOTE: CpuOnlyBuild and UseCuDNN flags can't be set at the same time.-->
+        <CpuOnlyBuild>true</CpuOnlyBuild>
+        <UseCuDNN>false</UseCuDNN>
+        <CudaVersion>9.0</CudaVersion>
+        <!-- NOTE: If Python support is enabled, PythonDir (below) needs to be
+         set to the root of your Python installation. If your Python installation
+         does not contain debug libraries, debug build will not work. -->
+        <PythonSupport>true</PythonSupport>
+        <!-- NOTE: If Matlab support is enabled, MatlabDir (below) needs to be
+         set to the root of your Matlab installation. -->
+        <MatlabSupport>true</MatlabSupport>
+        <!-- Set CUDA architecture suitable for your GPU.
+         Setting proper architecture is important to mimize your run and compile time. -->
+        <CudaArchitecture>compute_52,sm_52;compute_61,sm_61</CudaArchitecture>
+        <!-- CuDNN 5 are supported -->
+        <CudaPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0</CudaPath>
+        <CuDnnPath>$(CudaPath)</CuDnnPath>
+    </PropertyGroup>
+  
+    <PropertyGroup>
+        <PreDefines>_SCL_SECURE_NO_WARNINGS;USE_OPENCV;USE_LEVELDB;USE_LMDB</PreDefines>
+    </PropertyGroup>    
+    <PropertyGroup>
+        <OutDir>$(BuildDir)\$(Platform)\$(Configuration)\</OutDir>
+        <IntDir>$(BuildDir)\Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    </PropertyGroup>
+    <PropertyGroup>
+        <CaffeIncDir>$(RootDir)\include;$(RootDir)\src;$(RootDir)\include\caffe\proto;</CaffeIncDir>
+        <CaffeLibDir>$(OutDir)</CaffeLibDir>
+        <CaffeLibraries>libcaffe.lib</CaffeLibraries>
+    </PropertyGroup>  
+    <PropertyGroup>
+        <CudaIncDir>$(CudaPath)\include;$(CuDnnPath)\cuda\include</CudaIncDir>
+        <CudaLibDir>$(CudaPath)\lib\$(Platform);$(CuDnnPath)\cuda\lib\x64</CudaLibDir>
+        <CudaLibraries>cublas.lib;cuda.lib;curand.lib;cudart.lib;nvrtc.lib</CudaLibraries>
+    </PropertyGroup>  
+    <PropertyGroup>
+        <PythonDir>C:\Anaconda2</PythonDir>
+        <PythonIncDir>$(PythonDir)\include;$(PythonDir)\lib\site-packages\numpy\core\include</PythonIncDir>
+        <PythonLibDir>$(PythonDir)\libs</PythonLibDir>
+        <PythonLibraries></PythonLibraries>
+    </PropertyGroup>
+    <PropertyGroup>
+        <MatlabDir>C:\Program Files\MATLAB\R2015b</MatlabDir>
+        <MatlabIncDir>$(MatlabDir)\extern\include</MatlabIncDir>
+        <MatlabLibDir>$(MatlabDir)\extern\lib\win64\microsoft</MatlabLibDir>
+        <MatlabLibraries>libmx.lib;libmex.lib</MatlabLibraries>
+    </PropertyGroup>
+    <PropertyGroup>
+        <CaffeDepDir>$(ThirdDir)\caffe1-dependencies</CaffeDepDir>
+        <ThirdIncDir>$(CaffeDepDir)\include;$(CaffeDepDir)\include\lmdb;$(CaffeDepDir)\include\hdf5</ThirdIncDir>
+        <ThirdIncDir>$(ThirdIncDir);$(CaffeDepDir)\include\openblas;$(ThirdDir)\boost_1_64_0</ThirdIncDir>
+        <ThirdIncDir>$(ThirdIncDir);$(ThirdDir)\OpenCV-3.2.0\build\include</ThirdIncDir>
+        <ThirdLibDir>$(CaffeDepDir)\lib;$(ThirdDir)\boost_1_64_0\lib64-msvc-14.0</ThirdLibDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+        <ThirdLibraries>gflags.lib;glog.lib;leveldb.lib;lmdb.lib;libprotobuf.lib;snappy.lib;libopenblas.dll.a</ThirdLibraries>
+        <ThirdLibraries>$(ThirdLibraries);caffehdf5.lib;libcaffehdf5_cpp.lib;caffehdf5_hl.lib;caffezlib.lib</ThirdLibraries>
+        <ThirdLibraries>$(ThirdLibraries);opencv_world320.lib</ThirdLibraries>
+    </PropertyGroup>  
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <ThirdLibraries>gflagsd.lib;glogd.lib;leveldbd.lib;lmdbd.lib;libprotobufd.lib;snappyd.lib;libopenblas.dll.a</ThirdLibraries>
+        <ThirdLibraries>$(ThirdLibraries);caffehdf5_D.lib;libcaffehdf5_cpp_D.lib;caffehdf5_hl_D.lib;caffezlibd.lib</ThirdLibraries>
+        <ThirdLibraries>$(ThirdLibraries);opencv_world320d.lib</ThirdLibraries>
+    </PropertyGroup>  
+
+    <PropertyGroup>
+        <IncludeDir>$(CaffeIncDir);$(ThirdIncDir)</IncludeDir>
+        <LibraryDir>$(CaffeLibDir);$(ThirdLibDir)</LibraryDir>
+        <AllLibraries>$(CaffeLibraries);$(ThirdLibraries)</AllLibraries>
+    </PropertyGroup>  
+    <PropertyGroup Condition="'$(CpuOnlyBuild)'=='true'">
+        <PreDefines>$(PreDefines);CPU_ONLY</PreDefines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(CpuOnlyBuild)'=='false'">
+        <IncludeDir>$(IncludeDir);$(CudaIncDir)</IncludeDir>
+        <LibraryDir>$(LibraryDir);$(CudaLibDir)</LibraryDir>
+        <AllLibraries>$(AllLibraries);$(CudaLibraries)</AllLibraries>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(UseCuDNN)'=='true'">
+        <PreDefines>$(PreDefines);USE_CUDNN</PreDefines>
+        <AllLibraries>$(AllLibraries);cudnn.lib</AllLibraries>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(PythonSupport)'=='true'">
+        <PreDefines>$(PreDefines);WITH_PYTHON_LAYER;BOOST_PYTHON_STATIC_LIB</PreDefines>
+        <IncludeDir>$(IncludeDir);$(PythonIncDir)</IncludeDir>
+        <LibraryDir>$(LibraryDir);$(PythonLibDir)</LibraryDir>
+        <AllLibraries>$(AllLibraries);$(PythonLibraries)</AllLibraries>
+    </PropertyGroup>  
+    <PropertyGroup Condition="'$(MatlabSupport)'=='true'">
+        <PreDefines>$(PreDefines);MATLAB_MEX_FILE</PreDefines>
+        <IncludeDir>$(IncludeDir);$(MatlabIncDir)</IncludeDir>
+        <LibraryDir>$(LibraryDir);$(MatlabLibDir)</LibraryDir>
+        <AllLibraries>$(AllLibraries);$(MatlabLibraries)</AllLibraries>
+    </PropertyGroup>
+  
+    <ItemDefinitionGroup>
+        <ClCompile>
+            <PreprocessorDefinitions>$(PreDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+            <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+            <MinimalRebuild>false</MinimalRebuild>
+            <MultiProcessorCompilation>true</MultiProcessorCompilation>
+            <TreatWarningAsError>false</TreatWarningAsError>
+        </ClCompile>
+        <CudaCompile>
+            <Defines>$(PreDefines);%(Defines)</Defines>
+        </CudaCompile>
+    </ItemDefinitionGroup>  
+    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+        <ClCompile>
+            <Optimization>Full</Optimization>
+            <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+            <FunctionLevelLinking>true</FunctionLevelLinking>
+        </ClCompile>
+        <Link>
+            <EnableCOMDATFolding>true</EnableCOMDATFolding>
+            <GenerateDebugInformation>true</GenerateDebugInformation>
+            <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+            <OptimizeReferences>true</OptimizeReferences>
+        </Link>
+    </ItemDefinitionGroup>  
+    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <ClCompile>
+            <Optimization>Disabled</Optimization>
+            <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+        </ClCompile>
+        <Link>
+            <GenerateDebugInformation>true</GenerateDebugInformation>
+        </Link>
+    </ItemDefinitionGroup>
+</Project>
