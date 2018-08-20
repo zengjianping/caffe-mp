@@ -195,7 +195,7 @@ ifeq ($(USE_OPENCV), 1)
 	LIBRARIES += opencv_core opencv_highgui opencv_imgproc
 
 	ifeq ($(OPENCV_VERSION), 3)
-		LIBRARIES += opencv_imgcodecs tiff jasper jpeg png16 z
+		LIBRARIES += opencv_imgcodecs tiff jpeg jasper png16 z
 	endif
 
 endif
@@ -381,7 +381,7 @@ else
 	ifeq ($(LINUX), 1)
 		ifeq ($(BLAS), atlas)
 			# Linux simply has cblas and atlas
-			LIBRARIES += cblas atlas
+			LIBRARIES += cblas atlas gfortran
 		endif
 	else ifeq ($(OSX), 1)
 		# OS X packages atlas as the vecLib framework
