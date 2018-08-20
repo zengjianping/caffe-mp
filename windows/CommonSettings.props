@@ -17,7 +17,7 @@
         <PythonSupport>true</PythonSupport>
         <!-- NOTE: If Matlab support is enabled, MatlabDir (below) needs to be
          set to the root of your Matlab installation. -->
-        <MatlabSupport>true</MatlabSupport>
+        <MatlabSupport>false</MatlabSupport>
         <!-- Set CUDA architecture suitable for your GPU.
          Setting proper architecture is important to mimize your run and compile time. -->
         <CudaArchitecture>compute_52,sm_52;compute_61,sm_61</CudaArchitecture>
@@ -44,7 +44,7 @@
         <CudaLibraries>cublas.lib;cuda.lib;curand.lib;cudart.lib;nvrtc.lib</CudaLibraries>
     </PropertyGroup>  
     <PropertyGroup>
-        <PythonDir>C:\Anaconda2</PythonDir>
+        <PythonDir>D:\Anaconda2</PythonDir>
         <PythonIncDir>$(PythonDir)\include;$(PythonDir)\lib\site-packages\numpy\core\include</PythonIncDir>
         <PythonLibDir>$(PythonDir)\libs</PythonLibDir>
         <PythonLibraries></PythonLibraries>
